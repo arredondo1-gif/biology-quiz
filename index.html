@@ -1,0 +1,428 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>Biology T1 · 7th Grade — Quick Review and Quiz</title>
+<style>
+  :root {
+    --bg: #f5f6fa; --card: #ffffff; --text: #1d2130; --muted: #646b80; --border: #e2e5ee;
+    --accent: #3b5bdb; --accent-soft: #e7ecff; --ok: #2b8a3e; --ok-soft: #e6f6ea;
+    --bad: #c92a2a; --bad-soft: #fdeaea; --warn-soft: #fff6dc;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #12141b; --card: #1c1f2a; --text: #e9ebf2; --muted: #9aa1b5; --border: #2c3040;
+      --accent: #748ffc; --accent-soft: #252c4a; --ok: #69db7c; --ok-soft: #1b3324;
+      --bad: #ff8787; --bad-soft: #3b1f22; --warn-soft: #3a3320;
+    }
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
+    background: var(--bg); color: var(--text); line-height: 1.45; -webkit-text-size-adjust: 100%;
+  }
+  .wrap { max-width: 760px; margin: 0 auto; padding: 18px 16px 60px; }
+  header.top { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 14px; }
+  header.top h1 { font-size: 1.15rem; margin: 0; }
+  header.top .sub { color: var(--muted); font-size: .85rem; }
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 16px 18px; margin-bottom: 14px; }
+  h2 { font-size: 1.05rem; margin: 0 0 8px; }
+  h3 { font-size: .95rem; margin: 12px 0 4px; }
+  p { margin: 6px 0; }
+  ul { margin: 6px 0; padding-left: 20px; }
+  li { margin: 3px 0; }
+  .muted { color: var(--muted); }
+  .btn {
+    display: inline-block; border: 0; border-radius: 11px; padding: 12px 18px; font-size: 1rem; font-weight: 600;
+    background: var(--accent); color: #fff; cursor: pointer; text-decoration: none; -webkit-appearance: none;
+  }
+  .btn.ghost { background: var(--accent-soft); color: var(--accent); }
+  .btn.small { padding: 8px 12px; font-size: .9rem; }
+  .btn:disabled { opacity: .45; cursor: default; }
+  .row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+  .hero { text-align: center; padding: 26px 18px; }
+  .hero h2 { font-size: 1.35rem; }
+  .hero .row { justify-content: center; margin-top: 16px; }
+  .chip { display: inline-block; font-size: .75rem; font-weight: 600; padding: 3px 9px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); }
+  .num { display: inline-flex; width: 26px; height: 26px; border-radius: 50%; align-items: center; justify-content: center; background: var(--accent); color: #fff; font-size: .8rem; font-weight: 700; margin-right: 8px; flex: none; }
+  .rv-title { display: flex; align-items: center; }
+  table { width: 100%; border-collapse: collapse; font-size: .9rem; margin: 6px 0; }
+  th, td { text-align: left; padding: 6px 6px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  th { color: var(--muted); font-weight: 600; font-size: .8rem; }
+  .tip { background: var(--warn-soft); border-radius: 10px; padding: 8px 12px; font-size: .9rem; margin-top: 8px; }
+  b.t { color: var(--accent); }
+
+  /* quiz */
+  .progress { height: 8px; background: var(--border); border-radius: 99px; overflow: hidden; margin: 6px 0 14px; }
+  .progress > div { height: 100%; background: var(--accent); width: 0; transition: width .25s; }
+  .qmeta { display: flex; justify-content: space-between; align-items: center; font-size: .85rem; color: var(--muted); }
+  .question { font-size: 1.08rem; font-weight: 600; margin: 12px 0 6px; }
+  .passage { background: var(--accent-soft); border-radius: 10px; padding: 10px 12px; font-size: .95rem; margin: 10px 0; }
+  .opts { display: flex; flex-direction: column; gap: 9px; margin-top: 12px; }
+  .opt {
+    text-align: left; width: 100%; border: 2px solid var(--border); background: var(--card); color: var(--text);
+    border-radius: 12px; padding: 12px 14px; font-size: 1rem; cursor: pointer; display: flex; gap: 10px; align-items: flex-start;
+    -webkit-appearance: none; font-family: inherit;
+  }
+  .opt .l { font-weight: 700; color: var(--muted); flex: none; width: 18px; }
+  .opt:not(:disabled):hover { border-color: var(--accent); }
+  .opt.correct { border-color: var(--ok); background: var(--ok-soft); }
+  .opt.wrong { border-color: var(--bad); background: var(--bad-soft); }
+  .opt:disabled { cursor: default; }
+  .feedback { margin-top: 14px; border-radius: 12px; padding: 12px 14px; font-size: .95rem; }
+  .feedback.ok { background: var(--ok-soft); }
+  .feedback.bad { background: var(--bad-soft); }
+  .feedback strong { display: block; margin-bottom: 3px; }
+  .next-row { margin-top: 14px; display: flex; justify-content: flex-end; }
+  .score-big { font-size: 2.6rem; font-weight: 800; margin: 4px 0; }
+  .bar { height: 10px; background: var(--border); border-radius: 99px; overflow: hidden; }
+  .bar > div { height: 100%; background: var(--ok); }
+  .topic-row { display: grid; grid-template-columns: 1fr 70px; gap: 4px 10px; align-items: center; margin: 8px 0; font-size: .9rem; }
+  .miss { border-left: 4px solid var(--bad); padding: 6px 10px; margin: 10px 0; background: var(--bad-soft); border-radius: 0 10px 10px 0; font-size: .92rem; }
+  .hidden { display: none !important; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div>
+      <h1>Biology · 7th Grade · T1</h1>
+      <div class="sub">Quick review + multiple-choice quiz</div>
+    </div>
+    <button class="btn ghost small hidden" id="homeBtn" onclick="go('home')">Home</button>
+  </header>
+
+  <!-- HOME -->
+  <section id="home">
+    <div class="card hero">
+      <h2>Ready for the Biology exam?</h2>
+      <p class="muted">First a 5-minute review of the 5 topics in the study guide. Then 36 multiple-choice questions, with an explanation after every answer.</p>
+      <div class="row">
+        <button class="btn" onclick="go('review')">1 · Quick review</button>
+        <button class="btn" onclick="startQuiz('1')">2 · Quiz (36 questions)</button>
+      </div>
+      <div class="row" style="margin-top:10px">
+        <button class="btn ghost small" onclick="startQuiz('1', true)">Shuffled quiz</button>
+      </div>
+      <p class="muted" id="bestScore" style="margin-top:14px;font-size:.88rem"></p>
+    </div>
+    <div class="card">
+      <h2>Topics in the study guide</h2>
+      <ul>
+        <li>Scientific investigation and experiments</li>
+        <li>Characteristics and organization of living things</li>
+        <li>Common parts of cells</li>
+        <li>Prokaryotic and eukaryotic cells</li>
+        <li>Ecosystems</li>
+      </ul>
+      <p class="muted" style="font-size:.88rem">These questions are new: they are not the exercises from the guide. Do the guide's practice exercises in your notebook too.</p>
+    </div>
+  </section>
+
+  <!-- REVIEW -->
+  <section id="review" class="hidden">
+    <div class="card">
+      <h2>Quick review</h2>
+      <p class="muted">The minimum you need to know for each topic.</p>
+    </div>
+
+    <div class="card">
+      <h2 class="rv-title"><span class="num">1</span>Scientific investigation and experiments</h2>
+      <table>
+        <tr><th>Term</th><th>Key idea</th></tr>
+        <tr><td><b>Science</b></td><td>A systematic way of studying the natural world using observations, evidence, experiments and logical reasoning.</td></tr>
+        <tr><td><b>Observation</b></td><td>Information collected directly with the senses or instruments. "The plant has six yellow leaves."</td></tr>
+        <tr><td><b>Inference</b></td><td>A possible explanation based on observations and prior knowledge. "The plant may lack nutrients."</td></tr>
+        <tr><td><b>Scientific question</b></td><td>Testable and answerable with evidence. Opinion questions ("Which is prettier?") are not scientific.</td></tr>
+        <tr><td><b>Hypothesis</b></td><td>A specific, testable prediction based on science: "If ..., then ... because ..."</td></tr>
+        <tr><td><b>Independent variable</b></td><td>The one factor the scientist changes.</td></tr>
+        <tr><td><b>Dependent variable</b></td><td>What is measured or observed.</td></tr>
+        <tr><td><b>Controlled variables</b></td><td>Kept the same so the test is fair.</td></tr>
+        <tr><td><b>Control group</b></td><td>Does not get the treatment; it is the standard for comparison.</td></tr>
+        <tr><td><b>Repetition</b></td><td>Shows whether results are consistent and reliable.</td></tr>
+        <tr><td><b>Communication</b></td><td>Lets others evaluate, repeat and build on the work.</td></tr>
+      </table>
+      <div class="tip">Trick: the independent variable is what <b>I change</b>; the dependent variable <b>depends</b> on it and is what I measure.</div>
+    </div>
+
+    <div class="card">
+      <h2 class="rv-title"><span class="num">2</span>Characteristics and organization of living things</h2>
+      <table>
+        <tr><th>Characteristic</th><th>Example</th></tr>
+        <tr><td><b>Cellular organization</b></td><td>Bacteria are unicellular</td></tr>
+        <tr><td><b>Reproduction</b></td><td>A bird lays eggs</td></tr>
+        <tr><td><b>Growth and development</b></td><td>Caterpillar to butterfly</td></tr>
+        <tr><td><b>Response to stimuli</b></td><td>Pulling your hand from a hot surface</td></tr>
+        <tr><td><b>Homeostasis</b></td><td>Shivering when cold (keeps internal conditions stable)</td></tr>
+        <tr><td><b>Energy use</b></td><td>Cells break down nutrients</td></tr>
+        <tr><td><b>Heredity</b></td><td>Puppies inherit traits</td></tr>
+        <tr><td><b>Adaptation and evolution</b></td><td>Cacti reduce water loss</td></tr>
+      </table>
+      <table>
+        <tr><th>Level (small to large)</th><th>What it is</th></tr>
+        <tr><td><b>1. Cell</b></td><td>Basic structural and functional unit of life</td></tr>
+        <tr><td><b>2. Tissue</b></td><td>Similar cells working together</td></tr>
+        <tr><td><b>3. Organ</b></td><td>Different tissues working together</td></tr>
+        <tr><td><b>4. Organ system</b></td><td>Organs working together for a major function</td></tr>
+        <tr><td><b>5. Organism</b></td><td>A complete living individual</td></tr>
+      </table>
+      <div class="tip">Homeostasis = keeping <b>stable internal conditions</b> (body temperature, blood glucose, water balance) even when the outside changes.</div>
+    </div>
+
+    <div class="card">
+      <h2 class="rv-title"><span class="num">3</span>Common parts of cells</h2>
+      <p class="muted">All cells, prokaryotic and eukaryotic, share these four parts.</p>
+      <table>
+        <tr><th>Part</th><th>Job</th></tr>
+        <tr><td><b>Plasma membrane</b></td><td>Boundary of the cell. Selectively permeable: controls what enters and leaves, removes wastes, helps keep homeostasis.</td></tr>
+        <tr><td><b>Cytoplasm</b></td><td>Jellylike material inside the cell where many chemical reactions happen.</td></tr>
+        <tr><td><b>Ribosomes</b></td><td>Make proteins.</td></tr>
+        <tr><td><b>DNA</b></td><td>Genetic material with the instructions for cell activities.</td></tr>
+      </table>
+      <div class="tip">Proteins are essential for cell structure, growth and many cell functions. DNA gives the instructions; ribosomes build the proteins.</div>
+    </div>
+
+    <div class="card">
+      <h2 class="rv-title"><span class="num">4</span>Prokaryotic and eukaryotic cells</h2>
+      <table>
+        <tr><th></th><th>Prokaryotic</th><th>Eukaryotic</th></tr>
+        <tr><td><b>Size</b></td><td>Smaller, simpler</td><td>Larger, more complex</td></tr>
+        <tr><td><b>Nucleus</b></td><td>No</td><td>Yes, surrounded by a membrane</td></tr>
+        <tr><td><b>DNA</b></td><td>In a region of the cytoplasm</td><td>Mainly in the nucleus</td></tr>
+        <tr><td><b>Organelles</b></td><td>No membrane-bound organelles</td><td>Membrane-bound organelles</td></tr>
+        <tr><td><b>Both have</b></td><td colspan="2">Ribosomes, cytoplasm, plasma membrane, DNA</td></tr>
+        <tr><td><b>Examples</b></td><td>Bacteria, archaea</td><td>Animals, plants, fungi, protists</td></tr>
+      </table>
+      <div class="tip">"Pro" = before, "eu" = true. Prokaryotes have <b>no true nucleus</b>.</div>
+    </div>
+
+    <div class="card">
+      <h2 class="rv-title"><span class="num">5</span>Ecosystems</h2>
+      <table>
+        <tr><th>Term</th><th>Key idea</th></tr>
+        <tr><td><b>Ecosystem</b></td><td>All the living and nonliving things in an area, plus their interactions (forest, desert, lake, pond, grassland).</td></tr>
+        <tr><td><b>Biotic</b></td><td>Living: trees, fish, bacteria, fungi, insects.</td></tr>
+        <tr><td><b>Abiotic</b></td><td>Nonliving: sunlight, water, temperature, rocks, minerals, oxygen.</td></tr>
+        <tr><td><b>Habitat</b></td><td>The place where an organism normally lives.</td></tr>
+        <tr><td><b>Niche</b></td><td>The organism's role: how it gets resources and interacts with others.</td></tr>
+      </table>
+      <div class="tip">Frog: <b>habitat</b> = freshwater pond; <b>niche</b> = eats insects and is prey for larger animals. Habitat is the <b>address</b>; niche is the <b>job</b>. Changes in abiotic factors (like a drought) affect living things: some migrate, struggle or die.</div>
+    </div>
+
+    <div class="card hero">
+      <h2>Ready?</h2>
+      <div class="row">
+        <button class="btn" onclick="startQuiz('1')">Start the quiz</button>
+        <button class="btn ghost" onclick="startQuiz('1', true)">Shuffled quiz</button>
+      </div>
+    </div>
+  </section>
+
+<!-- QUIZ -->
+  <section id="quiz" class="hidden">
+    <div class="card">
+      <div class="qmeta"><span id="qcount"></span><span id="qscore"></span></div>
+      <div class="progress"><div id="pbar"></div></div>
+      <span class="chip" id="qtopic"></span>
+      <div class="passage hidden" id="qpassage"></div>
+      <div class="question" id="qtext"></div>
+      <div class="opts" id="qopts"></div>
+      <div class="feedback hidden" id="qfb"></div>
+      <div class="next-row"><button class="btn hidden" id="nextBtn" onclick="nextQ()">Next →</button></div>
+    </div>
+  </section>
+
+  <!-- RESULTS -->
+  <section id="results" class="hidden">
+    <div class="card hero">
+      <p class="muted" style="margin:0">Result</p>
+      <div class="score-big" id="rscore"></div>
+      <p id="rmsg"></p>
+      <div class="row">
+        <button class="btn" id="retryWrongBtn" onclick="retryWrong()">Retry only the missed ones</button>
+        <button class="btn ghost" onclick="startQuiz(setId, true)">Again (shuffled)</button>
+        <button class="btn ghost" onclick="go('review')">Back to review</button>
+      </div>
+    </div>
+    <div class="card">
+      <h2>By topic</h2>
+      <div id="rtopics"></div>
+    </div>
+    <div class="card" id="rmissCard">
+      <h2>To review</h2>
+      <div id="rmiss"></div>
+    </div>
+  </section>
+</div>
+
+<script>
+var SET1 = [
+  // 1. Scientific investigation and experiments
+  { t: "Scientific investigation", q: "Which statement is an observation?", o: ["The leaf is 8 cm long.", "The leaf is probably very old.", "The plant needs more light.", "The leaf will fall off soon."], e: "An observation is information collected directly with the senses or instruments, like measuring 8 cm. The other statements are explanations or predictions (inferences)." },
+  { t: "Scientific investigation", q: "A puddle disappeared after a sunny afternoon. Which statement is an inference?", o: ["The heat of the sun made the water evaporate.", "The puddle was 40 cm wide this morning.", "The sky was clear all day.", "The ground is dry now."], e: "An inference is a possible explanation based on observations and prior knowledge. The other three can be observed directly." },
+  { t: "Scientific investigation", q: "Which question can be answered with a scientific investigation?", o: ["Does the color of light affect how fast bean seeds sprout?", "Which fruit tastes the best?", "Is spring the nicest season?", "Are cats better pets than dogs?"], e: "A scientific question is testable and can be answered with evidence. Questions based on opinions (best, nicest, better) cannot be answered scientifically." },
+  { t: "Scientific investigation", q: "Which is the best hypothesis?", o: ["If ice cubes are placed in warmer water, then they will melt faster because heat moves into the ice.", "Warm water is better than cold water.", "Ice cubes are cold and white.", "I like to put ice in my drink."], e: "A good hypothesis is specific, testable, and based on science. The \"If..., then... because...\" format helps. The others are opinions or plain facts." },
+  { t: "Scientific investigation", p: "A student wants to know whether the amount of salt in water changes how long an ice cube takes to melt. She uses the same size of ice cube, 200 mL of water, and the same starting temperature in every cup. She measures the melting time with a timer.", q: "What is the independent variable?", o: ["The amount of salt in the water", "The time the ice takes to melt", "The size of the ice cube", "The starting temperature of the water"], e: "The independent variable is the one factor the scientist deliberately changes: here, the amount of salt." },
+  { t: "Scientific investigation", p: "A student wants to know whether the amount of salt in water changes how long an ice cube takes to melt. She uses the same size of ice cube, 200 mL of water, and the same starting temperature in every cup. She measures the melting time with a timer.", q: "What is the dependent variable?", o: ["The time the ice takes to melt", "The amount of salt in the water", "The volume of water", "The size of the ice cube"], e: "The dependent variable is what is measured or observed. It depends on the independent variable: here, the melting time." },
+  { t: "Scientific investigation", p: "A student wants to know whether the amount of salt in water changes how long an ice cube takes to melt. She uses the same size of ice cube, 200 mL of water, and the same starting temperature in every cup. She measures the melting time with a timer.", q: "Which of these is a controlled variable?", o: ["The 200 mL of water in every cup", "The amount of salt", "The melting time", "The result of the experiment"], e: "Controlled variables are kept the same so the experiment is fair. Using 200 mL of water in every cup makes sure only the salt is being tested." },
+  { t: "Scientific investigation", q: "What is the purpose of a control group?", o: ["It does not get the treatment, so it gives a standard for comparison.", "It receives the largest amount of the treatment.", "It makes sure the hypothesis is always correct.", "It is used only to repeat the measurements."], e: "The control group does not receive the experimental treatment. Scientists compare it with the other groups to see if the treatment had an effect." },
+  { t: "Scientific investigation", q: "A scientist repeats an experiment five times and gets very similar results each time. What does this suggest?", o: ["The results are consistent and more reliable.", "The hypothesis is now proven forever.", "Controlled variables are no longer needed.", "There is no need to share the results."], e: "Repetition shows whether results are consistent and reliable. Sharing the results then lets other scientists evaluate, repeat and build on the work." },
+
+  // 2. Characteristics and organization of living things
+  { t: "Living things", q: "A sunflower turns its head to follow the sun during the day. Which characteristic of life is this?", o: ["Response to stimuli", "Reproduction", "Heredity", "Cellular organization"], e: "Living things detect and respond to changes in their environment. The sunflower responds to light." },
+  { t: "Living things", q: "During exercise your body sweats, which helps keep your temperature steady. This is an example of:", o: ["Homeostasis", "Reproduction", "Growth and development", "Heredity"], e: "Homeostasis is maintaining relatively stable internal conditions, like body temperature, even when conditions change." },
+  { t: "Living things", q: "A polar bear has thick fur and a layer of fat that help it survive in very cold places. Which characteristic of life does this show?", o: ["Adaptation", "Reproduction", "Cellular organization", "Energy use"], e: "Adaptations are inherited characteristics that help a population survive in its environment, like the cactus that reduces water loss." },
+  { t: "Living things", q: "Which list shows the levels of organization from smallest to largest?", o: ["Cell, tissue, organ, organ system, organism", "Cell, organ, tissue, organism, organ system", "Tissue, cell, organ system, organ, organism", "Organism, organ system, organ, tissue, cell"], e: "Cells form tissues, tissues form organs, organs form organ systems, and organ systems form an organism." },
+  { t: "Living things", q: "The stomach is made of muscle tissue, connective tissue and other tissues that work together to digest food. At which level of organization is the stomach?", o: ["Organ", "Tissue", "Organ system", "Cell"], e: "An organ is made of different tissues working together." },
+  { t: "Living things", q: "The stomach, intestines and liver work together to digest food. What level of organization do they form?", o: ["An organ system", "A tissue", "An organism", "A cell"], e: "A group of organs working together for a major function is an organ system (here, the digestive system)." },
+  { t: "Living things", q: "Which statement about living things is true?", o: ["All living things are made of one or more cells.", "Only animals use energy.", "Only large organisms can reproduce.", "Living things stay the same throughout their lives."], e: "Cellular organization is a characteristic of all living things. Every living thing uses energy, reproduces as a group, and grows or changes." },
+
+  // 3. Common parts of cells
+  { t: "Parts of cells", q: "Which part of the cell works like a boundary that decides what goes in and what goes out?", o: ["Plasma membrane", "Ribosome", "DNA", "Cytoplasm"], e: "The plasma membrane forms the boundary of the cell and is selectively permeable." },
+  { t: "Parts of cells", q: "Where do many of the chemical reactions of a cell take place?", o: ["In the cytoplasm", "In the plasma membrane", "In the DNA", "Outside the cell"], e: "The cytoplasm is the jellylike material inside the cell where many chemical reactions happen." },
+  { t: "Parts of cells", q: "A cell needs to make the proteins it uses for growth. Which structure builds them?", o: ["Ribosomes", "The plasma membrane", "The cytoplasm", "Tissues"], e: "Ribosomes use genetic instructions to produce proteins." },
+  { t: "Parts of cells", q: "What does the DNA of a cell contain?", o: ["Instructions for the cell's activities", "The boundary of the cell", "The cell's waste products", "A jellylike material for reactions"], e: "DNA is the genetic material, with information and instructions that direct cell activities." },
+  { t: "Parts of cells", q: "What does \"selectively permeable\" mean for the plasma membrane?", o: ["It lets only certain substances enter and leave the cell.", "It lets everything pass freely.", "It does not let anything pass.", "It only lets substances leave the cell."], e: "A selectively permeable membrane regulates which substances can enter and leave the cell, which helps keep stable internal conditions." },
+  { t: "Parts of cells", q: "Which list names the four parts that ALL cells share?", o: ["Plasma membrane, cytoplasm, ribosomes, DNA", "Nucleus, cytoplasm, ribosomes, DNA", "Plasma membrane, nucleus, ribosomes, tissue", "Cytoplasm, DNA, organs, nucleus"], e: "Prokaryotic and eukaryotic cells both have a plasma membrane, cytoplasm, ribosomes and DNA. The nucleus is only in eukaryotic cells." },
+  { t: "Parts of cells", q: "Waste products pile up inside a cell because it cannot get rid of them. Which structure is most likely not working properly?", o: ["The plasma membrane", "The ribosomes", "The DNA", "The cytoplasm"], e: "The plasma membrane controls what enters and leaves the cell, including removing wastes." },
+
+  // 4. Prokaryotic and eukaryotic cells
+  { t: "Prokaryotic and eukaryotic", q: "Which statement is true about prokaryotic cells?", o: ["Their DNA is in a region of the cytoplasm.", "Their DNA is inside a nucleus.", "They have membrane-bound organelles.", "They do not have ribosomes."], e: "Prokaryotic cells have no nucleus, so their DNA is in a region of the cytoplasm. They do have ribosomes." },
+  { t: "Prokaryotic and eukaryotic", q: "Which organism is made of prokaryotic cells?", o: ["A bacterium", "A mushroom", "A maple tree", "An amoeba"], e: "Bacteria and archaea are prokaryotes. Fungi (mushroom), plants (maple) and protists (amoeba) are made of eukaryotic cells." },
+  { t: "Prokaryotic and eukaryotic", q: "Which pair of organisms are both made of eukaryotic cells?", o: ["A frog and a mushroom", "A bacterium and a frog", "An archaeon and a rose bush", "A bacterium and an archaeon"], e: "Animals (frog) and fungi (mushroom) are eukaryotes. Bacteria and archaea are prokaryotes." },
+  { t: "Prokaryotic and eukaryotic", q: "Which feature do eukaryotic cells have that prokaryotic cells do not?", o: ["Membrane-bound organelles, including a nucleus", "Ribosomes", "A plasma membrane", "DNA"], e: "Both types have DNA, ribosomes and a plasma membrane. Only eukaryotic cells have a nucleus and other membrane-bound organelles." },
+  { t: "Prokaryotic and eukaryotic", q: "Which comparison of the two types of cells is generally correct?", o: ["Eukaryotic cells are larger and more complex.", "Prokaryotic cells are larger and more complex.", "Both types are exactly the same size.", "Prokaryotic cells have a nucleus; eukaryotic cells do not."], e: "Prokaryotic cells are generally smaller and simpler. Eukaryotic cells are generally larger and more complex." },
+  { t: "Prokaryotic and eukaryotic", q: "Under a microscope, a student sees a cell with its DNA inside a nucleus surrounded by a membrane. What can she conclude?", o: ["It is a eukaryotic cell.", "It is a prokaryotic cell.", "It is a bacterium.", "It has no DNA."], e: "A membrane-surrounded nucleus holding the DNA is the key feature of eukaryotic cells." },
+
+  // 5. Ecosystems
+  { t: "Ecosystems", q: "Which of these is an abiotic factor in a pond ecosystem?", o: ["Sunlight reaching the water", "Frogs", "Algae", "Bacteria"], e: "Abiotic factors are nonliving, like sunlight, water, temperature and rocks. Frogs, algae and bacteria are living (biotic)." },
+  { t: "Ecosystems", q: "Which group lists only biotic factors?", o: ["Grass, insects and bacteria", "Rocks, water and oxygen", "Sunlight, trees and minerals", "Temperature, fish and fungi"], e: "Biotic factors are living things. The other groups include nonliving factors such as rocks, water, oxygen, sunlight, minerals or temperature." },
+  { t: "Ecosystems", q: "What does an ecosystem include?", o: ["All the living and nonliving things in an area and their interactions", "Only the animals in an area", "Only the plants and the sunlight in an area", "Only the nonliving parts of an area"], e: "An ecosystem is the living organisms plus the nonliving components in an area, and the interactions between them." },
+  { t: "Ecosystems", q: "An owl lives in a hollow tree in a forest and hunts mice at night. Which part describes its habitat?", o: ["The hollow tree in the forest", "Hunting mice at night", "Its role as a predator", "Helping to control the number of mice"], e: "The habitat is the place where an organism normally lives. The other options describe the owl's role (niche)." },
+  { t: "Ecosystems", q: "A bee collects nectar from flowers and pollinates them while it does. What does this describe?", o: ["Its niche", "Its habitat", "An abiotic factor", "Its ecosystem"], e: "A niche is an organism's role in its ecosystem: how it gets resources and how it interacts with other organisms." },
+  { t: "Ecosystems", q: "A long drought dries up most of the water in a pond. What is most likely to happen to the organisms that live there?", o: ["Some will migrate, struggle to survive, or die.", "Nothing, because only nonliving things changed.", "All of them will reproduce faster.", "Only the abiotic factors will be affected."], e: "Changes in abiotic factors, like less water, affect the living organisms in an ecosystem. Biotic and abiotic factors interact constantly." },
+  { t: "Ecosystems", q: "Which example shows a biotic factor interacting with an abiotic factor?", o: ["A plant uses sunlight to make food.", "A frog eats a fly.", "Water slowly wears down a rock.", "A rock is warmed by the sun."], e: "A plant (living) uses sunlight (nonliving). A frog and a fly are both living, and a rock with water or sunlight involves only nonliving things." }
+];
+
+var SETS = { "1": { name: "Biology", q: SET1 } };
+var TOPICS = ["Scientific investigation", "Living things", "Parts of cells", "Prokaryotic and eukaryotic", "Ecosystems"];
+var POOL = [], setId = "1", isRetry = false, order = [], idx = 0, score = 0, answers = [], current = null;
+var BEST_KEY = "bio7_best_";
+
+function $(id) { return document.getElementById(id); }
+function shuffle(a) { a = a.slice(); for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
+function esc(s) { return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); }
+function setName(id) { return SETS[id].name; }
+
+function go(view) {
+  ["home", "review", "quiz", "results"].forEach(function (v) { $(v).classList.toggle("hidden", v !== view); });
+  $("homeBtn").classList.toggle("hidden", view === "home");
+  if (view === "home") showBest();
+  window.scrollTo(0, 0);
+}
+
+function getBest(id) { try { return localStorage.getItem(BEST_KEY + id); } catch (e) { return null; } }
+
+function showBest() {
+  var b = getBest("1");
+  $("bestScore").textContent = b ? ("Best result on this device: " + b) : "";
+}
+
+function startQuiz(id, mixed, subset) {
+  isRetry = !!subset;
+  if (!subset) { setId = id || "1"; POOL = SETS[setId].q; }
+  var ids = subset || POOL.map(function (_, i) { return i; });
+  order = mixed ? shuffle(ids) : ids.slice();
+  idx = 0; score = 0; answers = [];
+  go("quiz");
+  render();
+}
+
+function retryWrong() {
+  var wrong = answers.filter(function (a) { return !a.ok; }).map(function (a) { return a.qi; });
+  if (wrong.length) startQuiz(setId, true, wrong);
+}
+
+function render() {
+  var qi = order[idx], item = POOL[qi];
+  $("qcount").textContent = setName(setId) + (isRetry ? " (review)" : "") + " · Question " + (idx + 1) + " of " + order.length;
+  $("qscore").textContent = "Correct: " + score;
+  $("pbar").style.width = (idx / order.length * 100) + "%";
+  $("qtopic").textContent = item.t;
+  $("qpassage").classList.toggle("hidden", !item.p);
+  $("qpassage").textContent = item.p || "";
+  $("qtext").textContent = item.q;
+  $("qfb").classList.add("hidden");
+  $("nextBtn").classList.add("hidden");
+  var opts = shuffle(item.o.map(function (text, i) { return { text: text, correct: i === 0 }; }));
+  current = { qi: qi, opts: opts };
+  var html = "";
+  opts.forEach(function (o, i) {
+    html += '<button class="opt" onclick="pick(' + i + ')"><span class="l">' + "ABCD"[i] + '</span><span>' + esc(o.text) + '</span></button>';
+  });
+  $("qopts").innerHTML = html;
+}
+
+function pick(i) {
+  var btns = $("qopts").querySelectorAll(".opt");
+  var chosen = current.opts[i], item = POOL[current.qi];
+  btns.forEach(function (b, j) {
+    b.disabled = true;
+    if (current.opts[j].correct) b.classList.add("correct");
+    else if (j === i) b.classList.add("wrong");
+  });
+  if (chosen.correct) score++;
+  answers.push({ qi: current.qi, ok: chosen.correct, chosen: chosen.text });
+  var fb = $("qfb");
+  fb.className = "feedback " + (chosen.correct ? "ok" : "bad");
+  fb.innerHTML = "<strong>" + (chosen.correct ? "Correct!" : "Not quite · Answer: " + esc(item.o[0])) + "</strong>" + esc(item.e);
+  $("qscore").textContent = "Correct: " + score;
+  $("nextBtn").textContent = (idx + 1 < order.length) ? "Next →" : "See result";
+  $("nextBtn").classList.remove("hidden");
+  $("nextBtn").scrollIntoView({ behavior: "smooth", block: "nearest" });
+}
+
+function nextQ() {
+  idx++;
+  if (idx < order.length) { render(); window.scrollTo(0, 0); }
+  else showResults();
+}
+
+function showResults() {
+  var total = order.length, pct = Math.round(score / total * 100);
+  $("rscore").textContent = score + " / " + total;
+  $("rmsg").textContent = pct >= 90 ? "Excellent! You are very well prepared." :
+                          pct >= 75 ? "Very good. Review the ones you missed and you are ready." :
+                          pct >= 60 ? "Good start, but review the topics marked below." :
+                                      "Read the review again and try once more.";
+  if (!isRetry) {
+    try {
+      var prev = getBest(setId), prevScore = prev ? parseInt(prev, 10) : -1;
+      if (score > prevScore) localStorage.setItem(BEST_KEY + setId, score + " of " + total);
+    } catch (e) {}
+  }
+  var th = "";
+  TOPICS.forEach(function (t) {
+    var rows = answers.filter(function (a) { return POOL[a.qi].t === t; });
+    if (!rows.length) return;
+    var ok = rows.filter(function (a) { return a.ok; }).length;
+    th += '<div class="topic-row"><div>' + esc(t) + '<div class="bar"><div style="width:' + (ok / rows.length * 100) + '%"></div></div></div><div style="text-align:right">' + ok + " / " + rows.length + "</div></div>";
+  });
+  $("rtopics").innerHTML = th;
+  var wrong = answers.filter(function (a) { return !a.ok; });
+  $("rmissCard").classList.toggle("hidden", !wrong.length);
+  $("retryWrongBtn").classList.toggle("hidden", !wrong.length);
+  $("rmiss").innerHTML = wrong.map(function (a) {
+    var it = POOL[a.qi];
+    return '<div class="miss"><b>' + esc(it.q) + '</b><br>Your answer: ' + esc(a.chosen) + '<br>Correct: <b>' + esc(it.o[0]) + '</b><br><span class="muted">' + esc(it.e) + '</span></div>';
+  }).join("");
+  go("results");
+}
+
+showBest();
+</script>
+</body>
+</html>
