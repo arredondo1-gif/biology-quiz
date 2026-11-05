@@ -99,13 +99,15 @@
   <section id="home">
     <div class="card hero">
       <h2>Ready for the Biology exam?</h2>
-      <p class="muted">First a 5-minute review of the 5 topics in the study guide. Then 36 multiple-choice questions, with an explanation after every answer.</p>
+      <p class="muted">First a 5-minute review of the 5 topics in the study guide. Then multiple-choice questions, with an explanation after every answer. Set 2 is the new one; Set 1 is the earlier quiz.</p>
       <div class="row">
         <button class="btn" onclick="go('review')">1 · Quick review</button>
-        <button class="btn" onclick="startQuiz('1')">2 · Quiz (36 questions)</button>
+        <button class="btn" onclick="startQuiz('2')">2 · New quiz: Set 2 (36 questions)</button>
       </div>
       <div class="row" style="margin-top:10px">
-        <button class="btn ghost small" onclick="startQuiz('1', true)">Shuffled quiz</button>
+        <button class="btn ghost small" onclick="startQuiz('2', true)">Set 2 shuffled</button>
+        <button class="btn ghost small" onclick="startQuiz('1')">Set 1 (36)</button>
+        <button class="btn ghost small" onclick="startQuiz('mix', true)">Random mix (30)</button>
       </div>
       <p class="muted" id="bestScore" style="margin-top:14px;font-size:.88rem"></p>
     </div>
@@ -215,8 +217,8 @@
     <div class="card hero">
       <h2>Ready?</h2>
       <div class="row">
-        <button class="btn" onclick="startQuiz('1')">Start the quiz</button>
-        <button class="btn ghost" onclick="startQuiz('1', true)">Shuffled quiz</button>
+        <button class="btn" onclick="startQuiz('2')">Start Set 2</button>
+        <button class="btn ghost" onclick="startQuiz('2', true)">Set 2 shuffled</button>
       </div>
     </div>
   </section>
@@ -307,7 +309,56 @@ var SET1 = [
   { t: "Ecosystems", q: "Which example shows a biotic factor interacting with an abiotic factor?", o: ["A plant uses sunlight to make food.", "A frog eats a fly.", "Water slowly wears down a rock.", "A rock is warmed by the sun."], e: "A plant (living) uses sunlight (nonliving). A frog and a fly are both living, and a rock with water or sunlight involves only nonliving things." }
 ];
 
-var SETS = { "1": { name: "Biology", q: SET1 } };
+var SET2 = [
+  { t: "Scientific investigation", q: "Which sentence is an observation?", o: ["The beaker holds 250 mL of blue liquid.", "The liquid is probably a salt solution.", "The liquid must be poisonous.", "The liquid will turn green tomorrow."], e: "An observation is collected directly with the senses or instruments, such as a measurement or a color. The other sentences are explanations or predictions." },
+  { t: "Scientific investigation", q: "A student sees that a houseplant by the window has yellow leaves and says, \"It is probably not getting enough nutrients.\" What is her statement?", o: ["An inference", "An observation", "A control group", "A dependent variable"], e: "An inference is a possible explanation based on observations and previous knowledge. The yellow leaves are the observation." },
+  { t: "Scientific investigation", q: "Which question can be investigated scientifically?", o: ["Does the type of soil affect how fast bean seeds germinate?", "Which flower smells the nicest?", "Is fall a better season than spring?", "Which pet is the most fun?"], e: "A scientific question must be testable with evidence. The other questions depend only on personal opinion." },
+  { t: "Scientific investigation", q: "Which hypothesis is specific, testable and based on scientific knowledge?", o: ["If a seed gets more water, then it will sprout faster because water is needed for germination.", "Seeds are interesting.", "Water is the best thing for a garden.", "Some seeds sprout and some do not."], e: "A good hypothesis is a specific, testable prediction with a reason based on science, usually in an \"If..., then... because...\" form." },
+  { t: "Scientific investigation", p: "A student wants to know if the amount of fertilizer changes how tall radish plants grow. She gives five groups of radishes 0 g, 2 g, 4 g, 6 g and 8 g of fertilizer. All plants are the same species, get the same water and sit in the same sunlight. After 3 weeks she measures the height of each plant.", q: "What is the independent variable?", o: ["The amount of fertilizer", "The height of the plants", "The amount of water", "The type of plant"], e: "The independent variable is the factor the scientist deliberately changes: the amount of fertilizer." },
+  { t: "Scientific investigation", p: "A student wants to know if the amount of fertilizer changes how tall radish plants grow. She gives five groups of radishes 0 g, 2 g, 4 g, 6 g and 8 g of fertilizer. All plants are the same species, get the same water and sit in the same sunlight. After 3 weeks she measures the height of each plant.", q: "What is the dependent variable?", o: ["The height of the plants after 3 weeks", "The amount of fertilizer", "The sunlight the plants receive", "The number of groups"], e: "The dependent variable is what is measured or observed during the experiment. Here it is plant height." },
+  { t: "Scientific investigation", p: "A student wants to know if the amount of fertilizer changes how tall radish plants grow. She gives five groups of radishes 0 g, 2 g, 4 g, 6 g and 8 g of fertilizer. All plants are the same species, get the same water and sit in the same sunlight. After 3 weeks she measures the height of each plant.", q: "Which group is the control group?", o: ["The plants that get 0 g of fertilizer", "The plants that get 8 g of fertilizer", "The plants that get the most water", "All of the plants together"], e: "The control group does not receive the treatment being tested, so it gives a standard to compare with." },
+  { t: "Scientific investigation", q: "Why should scientists keep the controlled variables the same in every group?", o: ["So that only the independent variable can explain the differences in results", "So the experiment takes less time", "So the hypothesis is always supported", "So they do not need to take measurements"], e: "Keeping other factors constant makes the experiment fair: any change in the dependent variable can then be linked to the independent variable." },
+  { t: "Scientific investigation", q: "Why do scientists publish their methods and results?", o: ["So others can evaluate the work, repeat it and build on it", "So nobody can ever question the results", "So the experiment does not have to be repeated", "So the hypothesis becomes a fact automatically"], e: "Communicating results lets other scientists check the findings, repeat the experiment and use it for new discoveries." },
+  { t: "Living things", q: "A caterpillar becomes a butterfly over several weeks. Which characteristic of life does this show?", o: ["Growth and development", "Homeostasis", "Response to stimuli", "Heredity"], e: "Growth and development means organisms increase in size and go through changes during their lives." },
+  { t: "Living things", q: "A person pulls their hand away from a hot pan. Which characteristic of life is this?", o: ["Response to stimuli", "Reproduction", "Adaptation", "Cellular organization"], e: "Living things detect changes in their environment (the heat) and respond to them." },
+  { t: "Living things", q: "Your body shivers when you are cold, which helps keep your temperature stable. This is an example of:", o: ["Homeostasis", "Heredity", "Reproduction", "Growth"], e: "Homeostasis is the ability to keep relatively stable internal conditions despite changes outside." },
+  { t: "Living things", q: "Puppies are born with fur color and ear shape similar to their parents. Which characteristic of life is this?", o: ["Heredity", "Energy use", "Homeostasis", "Response to stimuli"], e: "Heredity is the passing of genetic information from parents to offspring." },
+  { t: "Living things", q: "A group of similar cells that work together to do one specific job is called a:", o: ["Tissue", "Organ", "Organ system", "Organism"], e: "A tissue is a group of similar cells with a specific function. Different tissues together make an organ." },
+  { t: "Living things", q: "Which sequence is in the correct order from the simplest to the most complex level?", o: ["Cell, tissue, organ, organ system, organism", "Tissue, cell, organ, organism, organ system", "Cell, organ, tissue, organ system, organism", "Organ, tissue, cell, organism, organ system"], e: "Levels of organization: cell \u2192 tissue \u2192 organ \u2192 organ system \u2192 organism." },
+  { t: "Living things", q: "The heart is made of muscle tissue, connective tissue and other tissues that work together to pump blood. Why is it an organ and not just a tissue?", o: ["Because it is made of several different tissues working together", "Because it is made of only one kind of cell", "Because it is a complete living individual", "Because it has no cells"], e: "An organ is a structure composed of different tissues working together. A tissue has only similar cells." },
+  { t: "Parts of cells", q: "Which structure forms the boundary between a cell and its environment?", o: ["Plasma membrane", "Ribosome", "DNA", "Cytoplasm"], e: "The plasma membrane is the cell's boundary and controls what enters and leaves." },
+  { t: "Parts of cells", q: "What is the jellylike material inside a cell, where many chemical reactions happen?", o: ["Cytoplasm", "DNA", "Plasma membrane", "Tissue"], e: "Cytoplasm fills the inside of the cell and is where many chemical reactions occur." },
+  { t: "Parts of cells", q: "What is the main job of ribosomes?", o: ["Producing proteins", "Storing the genetic information", "Controlling what enters the cell", "Protecting the whole organism"], e: "Ribosomes use genetic instructions to build proteins." },
+  { t: "Parts of cells", q: "Why is DNA essential for a cell?", o: ["It carries the instructions that direct the cell's activities", "It forms the outer boundary of the cell", "It makes proteins by itself", "It stores the cell's waste"], e: "DNA is the genetic material. It holds the information and instructions for cellular activities." },
+  { t: "Parts of cells", q: "How does the plasma membrane help a cell keep stable internal conditions?", o: ["By controlling which substances enter and leave", "By making proteins", "By storing DNA", "By letting every substance pass freely"], e: "Because it is selectively permeable, the membrane helps the cell take in what it needs, remove waste and keep its inside stable." },
+  { t: "Parts of cells", q: "Proteins are essential for cell structure, growth and many cell functions. Which two cell parts work together to make them?", o: ["DNA gives the instructions and ribosomes build the proteins", "The plasma membrane gives the instructions and DNA builds them", "Cytoplasm gives the instructions and the membrane builds them", "Ribosomes give the instructions and DNA builds them"], e: "DNA contains the genetic instructions, and ribosomes use those instructions to produce proteins." },
+  { t: "Parts of cells", q: "Imagine a cell's plasma membrane stops controlling what moves in and out. What is the most likely result?", o: ["Harmful substances could enter, needed ones could leak out, and the cell may not survive", "Nothing changes, because the membrane is not important", "The cell will make more ribosomes", "The cell becomes a eukaryote"], e: "Without control over what enters and leaves, the cell cannot keep stable internal conditions, which threatens its survival." },
+  { t: "Prokaryotic and eukaryotic", q: "Which statement describes a prokaryotic cell?", o: ["It has no nucleus.", "It has a membrane-bound nucleus.", "It has no DNA.", "It has no ribosomes."], e: "Prokaryotic cells have DNA, ribosomes, cytoplasm and a plasma membrane, but no nucleus." },
+  { t: "Prokaryotic and eukaryotic", q: "Where is the DNA of a prokaryotic cell located?", o: ["In a region of the cytoplasm", "Inside a nucleus", "Inside the ribosomes", "Outside the cell"], e: "Without a nucleus, prokaryotic DNA is found in a region of the cytoplasm." },
+  { t: "Prokaryotic and eukaryotic", q: "Which of these organisms is made of eukaryotic cells?", o: ["A pine tree", "A bacterium", "An archaeon", "A cyanobacterium"], e: "Plants are eukaryotes. Bacteria and archaea (including cyanobacteria) are prokaryotes." },
+  { t: "Prokaryotic and eukaryotic", q: "Which is NOT a group of organisms made of eukaryotic cells?", o: ["Bacteria", "Animals", "Fungi", "Protists"], e: "Eukaryotes include animals, plants, fungi and protists. Bacteria are prokaryotes." },
+  { t: "Prokaryotic and eukaryotic", q: "A scientist finds a tiny organism. Its cells have DNA, ribosomes, cytoplasm and a plasma membrane, but no nucleus. What is the best conclusion?", o: ["It is prokaryotic, so it could be a bacterium", "It is eukaryotic, so it could be a fungus", "It is not made of cells", "It has no DNA"], e: "No nucleus (and no membrane-bound organelles) means prokaryotic. Bacteria and archaea are prokaryotes." },
+  { t: "Prokaryotic and eukaryotic", q: "Which statement correctly compares the two cell types?", o: ["Both types have ribosomes and a plasma membrane, but only eukaryotic cells have membrane-bound organelles.", "Only prokaryotic cells have DNA.", "Prokaryotic cells are usually larger and more complex.", "Only eukaryotic cells have a plasma membrane."], e: "All cells share four parts: plasma membrane, cytoplasm, ribosomes and DNA. Eukaryotes are usually larger and have membrane-bound organelles." },
+  { t: "Ecosystems", q: "Which group lists only abiotic factors?", o: ["Sunlight, water and rocks", "Fish, algae and water", "Bacteria, oxygen and fungi", "Trees, minerals and insects"], e: "Abiotic factors are the nonliving parts of an ecosystem, like sunlight, water, temperature, rocks, minerals and oxygen." },
+  { t: "Ecosystems", q: "Which is a biotic factor in a desert ecosystem?", o: ["A cactus", "Sand", "Temperature", "Sunlight"], e: "Biotic factors are living things. A cactus is alive; sand, temperature and sunlight are not." },
+  { t: "Ecosystems", q: "Which of these is an example of an ecosystem?", o: ["A lake with its living things, water, sunlight and their interactions", "Only the fish living in a lake", "Only the water in a lake", "A single tree"], e: "An ecosystem includes all living and nonliving components in an area and the interactions between them." },
+  { t: "Ecosystems", q: "A frog lives in a freshwater pond. What does \"freshwater pond\" describe?", o: ["Its habitat", "Its niche", "A biotic factor", "An abiotic factor"], e: "A habitat is the place where an organism normally lives." },
+  { t: "Ecosystems", q: "A frog eats insects and is food for snakes and birds. What does this describe?", o: ["Its niche", "Its habitat", "Its ecosystem", "An abiotic factor"], e: "A niche is the role of an organism in its ecosystem: how it gets resources and how it interacts with other organisms." },
+  { t: "Ecosystems", q: "Which example shows a biotic factor depending on an abiotic factor?", o: ["A tree uses sunlight, water and minerals to survive.", "A hawk eats a mouse.", "A fungus grows on a log.", "A bee visits a flower."], e: "Plants (living) depend on sunlight, water and minerals (nonliving)." },
+  { t: "Ecosystems", q: "A lake gets much warmer than usual for several months. What is the most likely effect on the organisms living in it?", o: ["Some may migrate, struggle to survive or die", "Nothing, because temperature is nonliving", "All will grow faster", "They will all change into eukaryotes"], e: "Changes in abiotic factors such as temperature can affect the living organisms in an ecosystem." },
+];
+
+var SETS = { "1": { name: "Biology · Set 1", q: SET1 }, "2": { name: "Biology · Set 2", q: SET2 } };
+SETS["mix"] = { name: "Biology · Mix", q: [] };
+var MIX_PER_TOPIC = 6;
+function buildMix() {
+  var out = [];
+  ["Scientific investigation", "Living things", "Parts of cells", "Prokaryotic and eukaryotic", "Ecosystems"].forEach(function (t) {
+    var pool = SET1.concat(SET2).filter(function (q) { return q.t === t && !q.p; });
+    out = out.concat(shuffle(pool).slice(0, MIX_PER_TOPIC));
+  });
+  SETS["mix"].q = out;
+}
 var TOPICS = ["Scientific investigation", "Living things", "Parts of cells", "Prokaryotic and eukaryotic", "Ecosystems"];
 var POOL = [], setId = "1", isRetry = false, order = [], idx = 0, score = 0, answers = [], current = null;
 var BEST_KEY = "bio7_best_";
@@ -327,13 +378,14 @@ function go(view) {
 function getBest(id) { try { return localStorage.getItem(BEST_KEY + id); } catch (e) { return null; } }
 
 function showBest() {
-  var b = getBest("1");
-  $("bestScore").textContent = b ? ("Best result on this device: " + b) : "";
+  var parts = [];
+  ["1", "2"].forEach(function (id) { var b = getBest(id); if (b) parts.push("Set " + id + ": " + b); });
+  $("bestScore").textContent = parts.length ? ("Best results on this device · " + parts.join(" · ")) : "";
 }
 
 function startQuiz(id, mixed, subset) {
   isRetry = !!subset;
-  if (!subset) { setId = id || "1"; POOL = SETS[setId].q; }
+  if (!subset) { setId = id || "2"; if (setId === "mix") buildMix(); POOL = SETS[setId].q; }
   var ids = subset || POOL.map(function (_, i) { return i; });
   order = mixed ? shuffle(ids) : ids.slice();
   idx = 0; score = 0; answers = [];
@@ -398,7 +450,7 @@ function showResults() {
                           pct >= 75 ? "Very good. Review the ones you missed and you are ready." :
                           pct >= 60 ? "Good start, but review the topics marked below." :
                                       "Read the review again and try once more.";
-  if (!isRetry) {
+  if (!isRetry && setId !== "mix") {
     try {
       var prev = getBest(setId), prevScore = prev ? parseInt(prev, 10) : -1;
       if (score > prevScore) localStorage.setItem(BEST_KEY + setId, score + " of " + total);
